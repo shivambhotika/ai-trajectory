@@ -175,18 +175,31 @@
         .panel-chart { grid-column: span 2; }
         .full-width { grid-column: 1 / -1; border-right: none; }
         
-        /* KNOWLEDGE GRID */
-        .knowledge-grid {
-            display: grid; grid-template-columns: 2fr 1fr; gap: 0;
+        /* CAPABILITY SECTION LAYOUT */
+        .capability-chart-full {
+            grid-column: 1 / -1;
+            border-right: none;
+            border-bottom: 4px solid var(--border);
         }
         
-        .knowledge-chart-panel {
+        .stats-row {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+        }
+        
+        .stats-row .panel {
+            border-bottom: 4px solid var(--border);
+        }
+        
+        .stats-row .panel:nth-child(1),
+        .stats-row .panel:nth-child(2) {
             border-right: 4px solid var(--border);
-            border-bottom: 4px solid var(--border);
         }
         
-        .knowledge-stats-panel {
-            border-bottom: 4px solid var(--border);
+        .stats-row .panel:nth-child(3) {
+            border-right: none;
         }
         
         /* TIER LIST */
@@ -426,11 +439,11 @@
         tr:nth-child(even) { background: #f8f8f8; }
         
         @media (max-width: 1024px) {
-            .main-grid, .tier-list, .napkin-showcase, .personal-stat-grid, .comparison-grid, .knowledge-grid {
+            .main-grid, .tier-list, .napkin-showcase, .personal-stat-grid, .comparison-grid, .stats-row {
                 grid-template-columns: 1fr;
             }
             .panel { border-right: none !important; }
-            .knowledge-chart-panel { border-right: none; }
+            .stats-row .panel { border-right: none !important; }
         }
     </style>
 </head>
@@ -484,25 +497,26 @@
             </div>
 
             <div class="main-grid">
-                <!-- THE SKILL CURVE - ENLARGED CHART -->
-                <div class="knowledge-grid">
-                    <div class="knowledge-chart-panel">
-                        <div class="panel-header yellow">THE SKILL CURVE</div>
-                        <div style="padding: 40px;">
-                            <div style="font-size: 0.95rem; margin-bottom: 15px; color: #666; font-weight: 600;">
-                                Three core skills. All racing toward 100%. None of them stopping.
-                            </div>
-                            <canvas id="capabilityChart" style="max-height: 400px;"></canvas>
-                            <div style="margin-top: 20px; font-size: 0.85rem; color: #666; line-height: 1.6;">
-                                <strong>Knowledge</strong> = standardized test scores across 57 subjects (history, law, medicine, etc.)<br>
-                                <strong>Coding</strong> = ability to write working software from scratch<br>
-                                <strong>Math</strong> = grade-school word problems through advanced proofs
-                            </div>
+                <!-- THE SKILL CURVE - FULL WIDTH CHART -->
+                <div class="capability-chart-full">
+                    <div class="panel-header yellow">THE SKILL CURVE</div>
+                    <div style="padding: 40px;">
+                        <div style="font-size: 0.95rem; margin-bottom: 15px; color: #666; font-weight: 600;">
+                            Three core skills. All racing toward 100%. None of them stopping.
+                        </div>
+                        <canvas id="capabilityChart" style="max-height: 400px;"></canvas>
+                        <div style="margin-top: 20px; font-size: 0.85rem; color: #666; line-height: 1.6;">
+                            <strong>Knowledge</strong> = standardized test scores across 57 subjects (history, law, medicine, etc.)<br>
+                            <strong>Coding</strong> = ability to write working software from scratch<br>
+                            <strong>Math</strong> = grade-school word problems through advanced proofs
                         </div>
                     </div>
+                </div>
 
+                <!-- STATS ROW - ALL THREE STATS -->
+                <div class="stats-row">
                     <!-- KNOWLEDGE STAT -->
-                    <div class="knowledge-stats-panel">
+                    <div class="panel">
                         <div class="panel-header yellow">KNOWLEDGE TESTS</div>
                         <div class="panel-body">
                             <div class="stat-label">STANDARDIZED EXAMS (57 SUBJECTS)</div>
@@ -513,30 +527,30 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- CODING STAT -->
-                <div class="panel">
-                    <div class="panel-header yellow">CODING</div>
-                    <div class="panel-body">
-                        <div class="stat-label">SOFTWARE ENGINEERING</div>
-                        <div class="stat-big" style="color: #ff8800;">97%</div>
-                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">success rate</div>
-                        <div class="highlight-box">
-                            Better at coding than most programmers. Was 29% in 2021. Yeah.
+                    <!-- CODING STAT -->
+                    <div class="panel">
+                        <div class="panel-header yellow">CODING</div>
+                        <div class="panel-body">
+                            <div class="stat-label">SOFTWARE ENGINEERING</div>
+                            <div class="stat-big" style="color: #ff8800;">97%</div>
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">success rate</div>
+                            <div class="highlight-box">
+                                Better at coding than most programmers. Was 29% in 2021. Yeah.
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- MATH STAT -->
-                <div class="panel">
-                    <div class="panel-header yellow">MATH</div>
-                    <div class="panel-body">
-                        <div class="stat-label">GRADE-SCHOOL WORD PROBLEMS</div>
-                        <div class="stat-big" style="color: #ff8800;">99%</div>
-                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">solved correctly</div>
-                        <div class="highlight-box">
-                            Essentially solved. Working on olympiad-level proofs now.
+                    <!-- MATH STAT -->
+                    <div class="panel">
+                        <div class="panel-header yellow">MATH</div>
+                        <div class="panel-body">
+                            <div class="stat-label">GRADE-SCHOOL WORD PROBLEMS</div>
+                            <div class="stat-big" style="color: #ff8800;">99%</div>
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">solved correctly</div>
+                            <div class="highlight-box">
+                                Essentially solved. Working on olympiad-level proofs now.
+                            </div>
                         </div>
                     </div>
                 </div>
