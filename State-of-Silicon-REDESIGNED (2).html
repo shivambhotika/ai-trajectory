@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cost Of Thinking - The AI Reality Check</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Inter:wght@400;600;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg: #ffffff; --fg: #000000; --bg-secondary: #f5f5f0; --border: #000000;
+            --red: #ff4444; --blue: #4444ff; --yellow: #ffcc00; --green: #00cc66;
+            --purple: #9933ff; --orange: #ff8800;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif; background: var(--bg-secondary);
+            background-image: radial-gradient(circle, #ddd 1px, transparent 1px);
+            background-size: 20px 20px; padding: 20px; line-height: 1.6; color: var(--fg);
+        }
+        
+        .container {
+            max-width: 1400px; margin: 0 auto; background: var(--bg);
+            border: 8px solid var(--border); box-shadow: 12px 12px 0 rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: var(--bg); border-bottom: 8px solid var(--border);
+            padding: 30px 40px; display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem;
+            font-weight: 900; letter-spacing: 2px; color: var(--fg);
+        }
+        
+        .subtitle {
+            font-size: 0.95rem; color: #666; margin-top: 8px;
+            font-weight: 600; letter-spacing: 0.5px;
+        }
+        
+        /* HERO HOOK */
+        .hero-hook {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 40px; text-align: center; color: white;
+            border-bottom: 8px solid var(--border);
+        }
+        
+        .hero-hook-title {
+            font-family: 'Bebas Neue', sans-serif; font-size: 4rem;
+            margin-bottom: 20px; line-height: 1.1;
+        }
+        
+        .hero-stat-reveal {
+            font-size: 1.3rem; margin: 30px auto; max-width: 600px;
+            background: rgba(0,0,0,0.3); padding: 30px; border-radius: 12px;
+        }
+        
+        .stat-number {
+            font-family: 'Bebas Neue', sans-serif; font-size: 5rem;
+            color: #00ff41; display: inline-block; margin: 0 10px;
+        }
+        
+        /* SECTIONS */
+        .section {
+            border-bottom: 8px solid var(--border);
+        }
+        
+        .section-header {
+            padding: 30px 40px; font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem; display: flex; justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header.magic { background: var(--yellow); color: #000; }
+        .section-header.brains { background: var(--red); color: white; }
+        .section-header.juice { background: var(--blue); color: white; }
+        .section-header.sowhat { background: var(--purple); color: white; }
+        
+        .about-button {
+            background: var(--blue); color: white; border: 4px solid var(--border);
+            padding: 12px 30px; font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem; cursor: pointer; letter-spacing: 1px;
+            transition: all 0.2s; box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+        }
+        
+        .about-button:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+        }
+        
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        
+        .modal-content {
+            background: var(--bg); border: 8px solid var(--border);
+            max-width: 600px; margin: 20px; padding: 40px;
+            box-shadow: 16px 16px 0 rgba(0,0,0,0.3); position: relative;
+        }
+        
+        .modal-title {
+            font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .modal-text {
+            font-size: 1.05rem; line-height: 1.8; margin-bottom: 15px;
+        }
+        
+        .close-modal {
+            position: absolute; top: 15px; right: 20px; font-size: 2.5rem;
+            cursor: pointer; color: var(--fg); line-height: 1; font-weight: bold;
+        }
+        
+        .close-modal:hover { color: var(--red); }
+        
+        .section-subtitle {
+            font-size: 1.15rem; margin: -20px 40px 30px 40px;
+            padding: 30px 35px; 
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            border: 4px solid var(--border);
+            border-left: 12px solid var(--border);
+            font-weight: 600; line-height: 1.7;
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.05);
+        }
+        
+        .main-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+        }
+        
+        .panel {
+            border-right: 4px solid var(--border); border-bottom: 4px solid var(--border);
+            min-height: 200px;
+        }
+        
+        .panel:nth-child(3n) { border-right: none; }
+        .panel-header {
+            padding: 18px 25px; font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem; border-bottom: 4px solid var(--border);
+        }
+        
+        .panel-header.red { background: var(--red); color: white; }
+        .panel-header.blue { background: var(--blue); color: white; }
+        .panel-header.yellow { background: var(--yellow); color: #000; }
+        
+        .panel-body { padding: 25px; background: var(--bg); }
+        
+        .stat-big {
+            font-family: 'Bebas Neue', sans-serif; font-size: 5rem;
+            line-height: 1; margin: 12px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.2px;
+            font-weight: 700; color: #666; margin-bottom: 8px;
+        }
+        
+        .highlight-box {
+            background: #fff3cd; border: 4px solid #000; padding: 18px;
+            margin: 18px 0; font-weight: 600; font-size: 0.95rem; line-height: 1.6;
+        }
+        
+        .highlight-box.mega {
+            font-size: 1.1rem; padding: 25px; border-width: 6px;
+        }
+        
+        .panel-chart { grid-column: span 2; }
+        .full-width { grid-column: 1 / -1; border-right: none; }
+        
+        /* KNOWLEDGE GRID */
+        .knowledge-grid {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 0;
+        }
+        
+        .knowledge-chart-panel {
+            border-right: 4px solid var(--border);
+            border-bottom: 4px solid var(--border);
+        }
+        
+        .knowledge-stats-panel {
+            border-bottom: 4px solid var(--border);
+        }
+        
+        /* TIER LIST */
+        .tier-list {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .tier-card {
+            border: 6px solid #000; padding: 25px; min-height: 280px;
+        }
+        
+        .tier-card.solved { background: #e8f5e9; border-color: #00cc66; }
+        .tier-card.nearly { background: #fff3e0; border-color: #ff8800; }
+        .tier-card.hard { background: #ffebee; border-color: #ff4444; }
+        
+        .tier-title {
+            font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+            margin-bottom: 15px; padding-bottom: 12px; border-bottom: 3px solid #000;
+        }
+        
+        .tier-list ul {
+            list-style: none; padding: 0;
+        }
+        
+        .tier-list li {
+            padding: 10px 0; border-bottom: 1px solid #ddd;
+            font-size: 0.95rem; line-height: 1.5;
+        }
+        
+        .tier-list li:last-child { border-bottom: none; }
+        
+        /* TIMELINE SLIDER */
+        .timeline-container {
+            background: #f8f8f8; padding: 40px; border: 6px solid #000;
+            margin: 25px 0;
+        }
+        
+        .timeline-label {
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;
+            font-weight: 700; color: #666; margin-bottom: 10px; text-align: center;
+        }
+        
+        .timeline-year {
+            font-family: 'Bebas Neue', sans-serif; font-size: 5rem;
+            text-align: center; color: var(--yellow); margin: 10px 0 20px 0;
+        }
+        
+        .timeline-content {
+            font-size: 1.25rem; text-align: center; line-height: 1.8;
+            min-height: 120px; font-weight: 600; margin-bottom: 30px;
+        }
+        
+        .timeline-slider-wrapper {
+            position: relative; padding: 20px 0;
+        }
+        
+        .timeline-slider {
+            width: 100%; height: 12px; cursor: pointer;
+            -webkit-appearance: none; appearance: none;
+            background: linear-gradient(to right, var(--yellow) 0%, var(--orange) 50%, var(--red) 100%);
+            border-radius: 10px; outline: none;
+            border: 3px solid var(--border);
+        }
+        
+        .timeline-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 30px; height: 30px; background: var(--fg);
+            cursor: pointer; border-radius: 50%; border: 4px solid white;
+            box-shadow: 0 0 0 3px var(--border);
+        }
+        
+        .timeline-slider::-moz-range-thumb {
+            width: 30px; height: 30px; background: var(--fg);
+            cursor: pointer; border-radius: 50%; border: 4px solid white;
+            box-shadow: 0 0 0 3px var(--border);
+        }
+        
+        .timeline-marks {
+            display: flex; justify-content: space-between;
+            margin-top: 15px; padding: 0 10px;
+        }
+        
+        .timeline-mark {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem; color: #999;
+            text-align: center;
+        }
+        
+        .timeline-mark.active { color: var(--fg); font-weight: bold; }
+        
+        .timeline-description {
+            text-align: center; margin-top: 20px;
+            font-size: 0.9rem; color: #666; font-style: italic;
+        }
+        
+        /* NAPKIN MATH SHOWCASE */
+        .napkin-showcase {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .napkin-card {
+            background: #000; color: #00ff41; padding: 35px;
+            border: 6px solid #00ff41; text-align: center;
+        }
+        
+        .napkin-card-number {
+            font-family: 'Space Mono', monospace; font-size: 2.5rem;
+            font-weight: bold; margin-bottom: 15px;
+        }
+        
+        .napkin-card-text {
+            font-size: 1.1rem; line-height: 1.6;
+        }
+        
+        /* COMPARISON TOGGLE */
+        .comparison-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .comparison-button {
+            background: var(--bg); border: 4px solid #000; padding: 20px;
+            cursor: pointer; transition: all 0.2s; text-align: center;
+            font-weight: 700; font-size: 1.05rem;
+            font-family: 'Bebas Neue', sans-serif;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+        }
+        
+        .comparison-button:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+        .comparison-button.active { background: var(--blue); color: white; }
+        
+        .comparison-button .button-icon {
+            font-size: 2rem; display: block; margin-bottom: 8px;
+        }
+        
+        .comparison-visual {
+            background: #f8f8f8; border: 6px solid #000; padding: 40px;
+            text-align: center; margin-top: 20px; min-height: 250px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+        
+        .comparison-stat {
+            font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem;
+            color: var(--blue); margin-bottom: 20px;
+        }
+        
+        .comparison-text {
+            font-size: 1.15rem; line-height: 1.7;
+            max-width: 700px; font-weight: 600;
+        }
+        
+        .comparison-detail {
+            margin-top: 20px; padding-top: 20px;
+            border-top: 3px solid var(--border);
+            font-size: 1rem; color: #666;
+        }
+        
+        /* PERSONAL IMPACT BOX */
+        .personal-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 40px; border: 6px solid #000;
+            margin: 30px 0;
+        }
+        
+        .personal-box-title {
+            font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .personal-stat-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .personal-stat {
+            background: rgba(0,0,0,0.3); padding: 25px; border-radius: 8px;
+        }
+        
+        .personal-stat-number {
+            font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
+            color: #00ff41; margin-bottom: 10px;
+        }
+        
+        /* SO WHAT SECTION */
+        .sowhat-grid {
+            display: grid; grid-template-columns: 1fr; gap: 25px;
+            padding: 40px; background: var(--bg);
+        }
+        
+        .sowhat-card {
+            border: 6px solid var(--purple); padding: 30px;
+            background: #f8f8f8;
+        }
+        
+        .sowhat-card-title {
+            font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
+            color: var(--purple); margin-bottom: 15px;
+        }
+        
+        .sowhat-card-text {
+            font-size: 1.1rem; line-height: 1.8; font-weight: 500;
+        }
+        
+        /* FOOTER */
+        .footer {
+            background: #000; color: white; padding: 40px;
+            font-size: 0.9rem; line-height: 1.8;
+        }
+        
+        .footer-sources {
+            margin-top: 20px; padding-top: 20px; border-top: 2px solid #333;
+        }
+        
+        .footer-link {
+            color: #00ff41; text-decoration: none; font-weight: 600;
+        }
+        
+        table {
+            width: 100%; border-collapse: collapse; margin: 20px 0;
+        }
+        
+        th, td {
+            border: 2px solid #000; padding: 14px; text-align: left;
+        }
+        
+        th {
+            background: #000; color: white; font-weight: 700;
+            text-transform: uppercase; font-size: 0.8rem;
+        }
+        
+        tr:nth-child(even) { background: #f8f8f8; }
+        
+        @media (max-width: 1024px) {
+            .main-grid, .tier-list, .napkin-showcase, .personal-stat-grid, .comparison-grid, .knowledge-grid {
+                grid-template-columns: 1fr;
+            }
+            .panel { border-right: none !important; }
+            .knowledge-chart-panel { border-right: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div>
+                <div class="logo">THE COST OF THINKING</div>
+                <div class="subtitle">The AI reality check nobody asked for (but everyone needs)</div>
+            </div>
+            <button class="about-button" onclick="toggleModal()">ABOUT</button>
+        </div>
+
+        <!-- ABOUT MODAL -->
+        <div id="aboutModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="toggleModal()">&times;</span>
+                <div class="modal-title">ABOUT THIS PROJECT</div>
+                <div class="modal-text">
+                    I built this because reading 40-page investment memos is boring. Everyone screams about AGI, but nobody explains how much electricity it actually costs to generate a picture of a cat in space.
+                </div>
+                <div class="modal-text">
+                    This is a living snapshot of the AI industry translated for humans who have a life outside of Twitter.
+                </div>
+                <div class="modal-text" style="margin-top: 25px; font-style: italic;">
+                    Built with ☕️ and 🤖 by someone who should probably be working instead.
+                </div>
+            </div>
+        </div>
+
+        <!-- HERO HOOK -->
+        <div class="hero-hook">
+            <div class="hero-hook-title">In 2020, AI scored 44% on college exams.<br>Today it scores 93%.</div>
+            <div class="hero-stat-reveal">
+                <p style="font-size: 1.1rem; margin-bottom: 20px;">It took humans <span class="stat-number">50,000</span> years to go from cave paintings to calculus.</p>
+                <p style="font-size: 1.1rem;">It took AI <span class="stat-number">5</span> years to go from "can't write a sentence" to "passes the bar exam."</p>
+                <p style="margin-top: 30px; font-size: 1.2rem; font-weight: 700;">It's not slowing down.</p>
+            </div>
+        </div>
+
+        <!-- SECTION 1: THE MAGIC (CAPABILITY) -->
+        <div class="section">
+            <div class="section-header magic">
+                <span>✨ THE MAGIC (WHAT AI CAN ACTUALLY DO)</span>
+                <span style="font-size: 1rem;">SPOILER: A LOT</span>
+            </div>
+            
+            <div class="section-subtitle">
+                We give AI the same tests we give humans — bar exams, medical licensing, grad school finals. Here's how it's doing. (Hint: better than you'd guess, worse than the hype would suggest.)
+            </div>
+
+            <div class="main-grid">
+                <!-- THE SKILL CURVE - ENLARGED CHART -->
+                <div class="knowledge-grid">
+                    <div class="knowledge-chart-panel">
+                        <div class="panel-header yellow">THE SKILL CURVE</div>
+                        <div style="padding: 40px;">
+                            <div style="font-size: 0.95rem; margin-bottom: 15px; color: #666; font-weight: 600;">
+                                Three core skills. All racing toward 100%. None of them stopping.
+                            </div>
+                            <canvas id="capabilityChart" style="max-height: 400px;"></canvas>
+                            <div style="margin-top: 20px; font-size: 0.85rem; color: #666; line-height: 1.6;">
+                                <strong>Knowledge</strong> = standardized test scores across 57 subjects (history, law, medicine, etc.)<br>
+                                <strong>Coding</strong> = ability to write working software from scratch<br>
+                                <strong>Math</strong> = grade-school word problems through advanced proofs
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KNOWLEDGE STAT -->
+                    <div class="knowledge-stats-panel">
+                        <div class="panel-header yellow">KNOWLEDGE TESTS</div>
+                        <div class="panel-body">
+                            <div class="stat-label">STANDARDIZED EXAMS (57 SUBJECTS)</div>
+                            <div class="stat-big" style="color: #ff8800;">93%</div>
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">accurate today</div>
+                            <div class="highlight-box">
+                                Can pass the bar exam, medical licensing boards, and most PhD qualifying exams. Was 44% in 2020.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CODING STAT -->
+                <div class="panel">
+                    <div class="panel-header yellow">CODING</div>
+                    <div class="panel-body">
+                        <div class="stat-label">SOFTWARE ENGINEERING</div>
+                        <div class="stat-big" style="color: #ff8800;">97%</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">success rate</div>
+                        <div class="highlight-box">
+                            Better at coding than most programmers. Was 29% in 2021. Yeah.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MATH STAT -->
+                <div class="panel">
+                    <div class="panel-header yellow">MATH</div>
+                    <div class="panel-body">
+                        <div class="stat-label">GRADE-SCHOOL WORD PROBLEMS</div>
+                        <div class="stat-big" style="color: #ff8800;">99%</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">solved correctly</div>
+                        <div class="highlight-box">
+                            Essentially solved. Working on olympiad-level proofs now.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- THE TIER LIST -->
+                <div class="panel full-width">
+                    <div class="panel-header yellow">WHAT'S ACTUALLY GETTING AUTOMATED (THE HONEST VERSION)</div>
+                    <div class="panel-body">
+                        <div class="tier-list">
+                            <div class="tier-card solved">
+                                <div class="tier-title" style="color: #00cc66;">✅ SOLVED (95%+ ACCURACY)</div>
+                                <ul>
+                                    <li>Writing boilerplate code</li>
+                                    <li>Translating between languages</li>
+                                    <li>Summarizing documents</li>
+                                    <li>Basic customer service</li>
+                                    <li>Answering factual questions</li>
+                                    <li>Being polite to angry people</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="tier-card nearly">
+                                <div class="tier-title" style="color: #ff8800;">🟡 NEARLY THERE (80-95%)</div>
+                                <ul>
+                                    <li>Writing complex software</li>
+                                    <li>Medical diagnosis from scans</li>
+                                    <li>Legal document analysis</li>
+                                    <li>Advanced math proofs</li>
+                                    <li>Arguing on Reddit convincingly</li>
+                                    <li>Writing essays (and faking citations)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="tier-card hard">
+                                <div class="tier-title" style="color: #ff4444;">🔴 STILL HARD (<80%)</div>
+                                <ul>
+                                    <li>Long-term strategic planning</li>
+                                    <li>Novel scientific research</li>
+                                    <li>True creativity</li>
+                                    <li>Knowing when to shut up</li>
+                                    <li>Dealing with ambiguity</li>
+                                    <li>Physical world tasks (for now)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="highlight-box mega">
+                            <strong>The pattern:</strong> If the task has clear rules and lots of examples, AI crushes it. If it requires judgment, taste, or understanding what you <em>didn't</em> say, humans still win.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- THEN VS NOW TIMELINE -->
+                <div class="panel full-width">
+                    <div class="panel-header yellow">THEN VS. NOW (DRAG THE SLIDER)</div>
+                    <div class="panel-body">
+                        <div class="timeline-container">
+                            <div class="timeline-label">DRAG TO EXPLORE</div>
+                            <div class="timeline-year" id="timelineYear">2020</div>
+                            <div class="timeline-content" id="timelineContent">
+                                AI could barely complete a paragraph without hallucinating fake facts. Coding? Forget it. Math? Maybe addition.
+                            </div>
+                            <div class="timeline-slider-wrapper">
+                                <input type="range" min="0" max="2" step="1" value="0" class="timeline-slider" id="timelineSlider" />
+                                <div class="timeline-marks">
+                                    <div class="timeline-mark active" id="mark2020">2020<br><small>The Dark Ages</small></div>
+                                    <div class="timeline-mark" id="mark2024">2024<br><small>Holy Shit</small></div>
+                                    <div class="timeline-mark" id="mark2030">2030<br><small>Projection</small></div>
+                                </div>
+                            </div>
+                            <div class="timeline-description">
+                                Slide to see how AI capabilities evolved from "barely functional" to "better than most humans" in just 5 years.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: THE BRAINS (COMPUTE) -->
+        <div class="section">
+            <div class="section-header brains">
+                <span>🧠 THE BRAINS (COMPUTE)</span>
+                <span style="font-size: 1rem;">HOW MUCH MATH IT TAKES</span>
+            </div>
+            
+            <div class="section-subtitle">
+                Every AI model is basically a pile of math. The bigger the pile, the smarter it gets. Here's how absurdly big these piles have become.
+            </div>
+
+            <div class="main-grid">
+                <!-- COMPUTE CHART -->
+                <div class="panel panel-chart">
+                    <div class="panel-header red">COMPUTING POWER OVER TIME</div>
+                    <div class="panel-body">
+                        <div style="padding: 25px;">
+                            <div style="font-size: 0.95rem; margin-bottom: 15px; color: #666; font-weight: 600;">
+                                Default view: dollars. Because numbers like "10²⁶" mean nothing to humans.
+                            </div>
+                            <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                                <button class="comparison-button active" onclick="showComputeView('cost', this)" style="padding: 10px 18px; font-size: 0.85rem;">
+                                    COST ($M)
+                                </button>
+                                <button class="comparison-button" onclick="showComputeView('flops', this)" style="padding: 10px 18px; font-size: 0.85rem;">
+                                    COMPUTING POWER
+                                </button>
+                            </div>
+                            <canvas id="computeChart" style="max-height: 400px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GROWTH STAT -->
+                <div class="panel">
+                    <div class="panel-header red">HOW FAST IT'S GROWING</div>
+                    <div class="panel-body">
+                        <div class="stat-label">ANNUAL INCREASE</div>
+                        <div class="stat-big" style="color: #ff4444;">4.4x</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">every year</div>
+                        <div class="highlight-box">
+                            <strong>Translation:</strong> Imagine doubling your IQ every 6 months. That's the curve we're on.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- THE CREDIT CARD BILL -->
+                <div class="panel full-width">
+                    <div class="panel-header red">THE CREDIT CARD BILL</div>
+                    <div class="panel-body">
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px;">
+                            <div>
+                                <div class="stat-label">TRAINING GPT-5 (2025)</div>
+                                <div class="stat-big" style="color: #ff4444; font-size: 6rem;">$290M</div>
+                                <div class="highlight-box mega">
+                                    More than building a 40-story skyscraper.<br>
+                                    About the same as buying every house in a small town.<br>
+                                    <strong>The next one might cost $1 billion.</strong><br>
+                                    That's not a typo — that's a country's education budget.
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="stat-label" style="margin-bottom: 15px;">COST EVOLUTION</div>
+                                <table style="font-size: 0.9rem;">
+                                    <tr>
+                                        <td><strong>GPT-3 (2020)</strong></td>
+                                        <td style="text-align: right;">$4.6M</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>GPT-4 (2023)</strong></td>
+                                        <td style="text-align: right;">$78M</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>GPT-5 (2025)</strong></td>
+                                        <td style="text-align: right; color: #ff4444; font-weight: 700;">$290M</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Next Gen (?)</strong></td>
+                                        <td style="text-align: right; color: #ff4444; font-weight: 700;">$1B+</td>
+                                    </tr>
+                                </table>
+                                <p style="margin-top: 15px; font-size: 0.85rem; color: #666; font-weight: 600;">
+                                    Only 5-6 organizations on Earth can afford this.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NAPKIN MATH SHOWCASE -->
+                <div class="panel full-width">
+                    <div class="panel-header red">THE NAPKIN MATH (AKA THE "WTF" NUMBERS)</div>
+                    <div class="panel-body">
+                        <div class="napkin-showcase">
+                            <div class="napkin-card">
+                                <div class="napkin-card-number">20 TRILLION YEARS</div>
+                                <div class="napkin-card-text">
+                                    If you did 1 calculation per second, this is how long it would take you to match GPT-5's training compute. For reference, the universe is only 14 billion years old.
+                                </div>
+                            </div>
+                            
+                            <div class="napkin-card">
+                                <div class="napkin-card-number">ENTIRE INTERNET</div>
+                                <div class="napkin-card-text">
+                                    GPT-5 basically read every book, every Wikipedia article, every forum post, every code repository. Twice. And it still wanted more.
+                                </div>
+                            </div>
+                            
+                            <div class="napkin-card">
+                                <div class="napkin-card-number">10,000 OLYMPIC POOLS</div>
+                                <div class="napkin-card-text">
+                                    If each calculation was a grain of sand, you'd need this many Olympic swimming pools to hold them all. Try visualizing that.
+                                </div>
+                            </div>
+                            
+                            <div class="napkin-card">
+                                <div class="napkin-card-number">50,000 HOMES</div>
+                                <div class="napkin-card-text">
+                                    The electricity used to train GPT-4 could power this many homes for a year. The next model? Double it.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PERSONAL COST -->
+                <div class="panel full-width">
+                    <div class="panel-header red">WHAT IT COSTS <em>YOU</em></div>
+                    <div class="panel-body">
+                        <div class="personal-box">
+                            <div class="personal-box-title">Every time you ask ChatGPT a question:</div>
+                            
+                            <div class="personal-stat-grid">
+                                <div class="personal-stat">
+                                    <div class="personal-stat-number">~2¢</div>
+                                    <div>What it costs OpenAI to answer you (they eat most of this cost)</div>
+                                </div>
+                                
+                                <div class="personal-stat">
+                                    <div class="personal-stat-number">5 MIN</div>
+                                    <div>Enough electricity to charge your phone for this long</div>
+                                </div>
+                                
+                                <div class="personal-stat">
+                                    <div class="personal-stat-number">500ML</div>
+                                    <div>Water consumed cooling the data center (about one bottle)</div>
+                                </div>
+                            </div>
+                            
+                            <p style="margin-top: 30px; font-size: 1.1rem; font-weight: 600; text-align: center;">
+                                Multiply that by 100 million daily users. Now you see the problem.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: THE JUICE (POWER) -->
+        <div class="section">
+            <div class="section-header juice">
+                <span>⚡ THE JUICE (POWER)</span>
+                <span style="font-size: 1rem;">THE ELECTRIC BILL</span>
+            </div>
+            
+            <div class="section-subtitle">
+                Turns out, making a computer think is basically like leaving every light in your city on. Forever. Here's how much electricity AI actually drinks.
+            </div>
+
+            <div class="main-grid">
+                <!-- CURRENT USAGE -->
+                <div class="panel">
+                    <div class="panel-header blue">RIGHT NOW (2024)</div>
+                    <div class="panel-body">
+                        <div class="stat-label">DATA CENTER ELECTRICITY</div>
+                        <div class="stat-big" style="color: #4444ff;">415</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">TWh per year</div>
+                        <div class="highlight-box">
+                            More than all of UK's electricity.<br>
+                            88 million homes worth.<br>
+                            Every Bitcoin miner on Earth × 3.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GROWTH RATE -->
+                <div class="panel">
+                    <div class="panel-header blue">HOW FAST IT'S GROWING</div>
+                    <div class="panel-body">
+                        <div class="stat-label">ANNUAL INCREASE</div>
+                        <div class="stat-big" style="color: #4444ff;">15%</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">per year</div>
+                        <div class="highlight-box">
+                            Doubling every 5 years.<br>
+                            Internet usage grew ~5% a year.<br>
+                            Smartphones took 7 years to go mainstream.<br>
+                            <strong>AI is outrunning all of them.</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2030 PROJECTION -->
+                <div class="panel">
+                    <div class="panel-header blue">BY 2030</div>
+                    <div class="panel-body">
+                        <div class="stat-label">PROJECTED CONSUMPTION</div>
+                        <div class="stat-big" style="color: #4444ff;">945</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">TWh per year</div>
+                        <div class="highlight-box">
+                            <strong>3% of all electricity on Earth.</strong><br>
+                            More than Japan. The entire country. All of it.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE COMPARISON -->
+                <div class="panel full-width">
+                    <div class="panel-header blue">415 TWH IS A LOT. HOW MUCH? (CLICK TO COMPARE)</div>
+                    <div class="panel-body">
+                        <div class="comparison-grid">
+                            <div class="comparison-button active" onclick="showComparison('uk', this)">
+                                <span class="button-icon">🇬🇧</span>
+                                ALL OF UK
+                            </div>
+                            <div class="comparison-button" onclick="showComparison('homes', this)">
+                                <span class="button-icon">🏠</span>
+                                88 MILLION HOMES
+                            </div>
+                            <div class="comparison-button" onclick="showComparison('bitcoin', this)">
+                                <span class="button-icon">₿</span>
+                                BITCOIN × 3
+                            </div>
+                            <div class="comparison-button" onclick="showComparison('cars', this)">
+                                <span class="button-icon">🚗</span>
+                                250M ELECTRIC CARS
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-visual">
+                            <div class="comparison-stat" id="comparisonStat">= UK (300 TWh)</div>
+                            <div class="comparison-text" id="comparisonText">
+                                Data centers currently use more electricity than the entire United Kingdom. Every year. And that number is growing 15% annually.
+                            </div>
+                            <div class="comparison-detail" id="comparisonDetail">
+                                That's equivalent to powering 28 million UK households for an entire year. For context, the UK has 27 million households total.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- THE BOTTLENECK -->
+                <div class="panel full-width">
+                    <div class="panel-header blue">THE ACTUAL BOTTLENECK</div>
+                    <div class="panel-body">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                            <div>
+                                <div class="stat-label">POWER PLANTS NEEDED</div>
+                                <div class="stat-big" style="color: #4444ff; font-size: 6rem;">~50</div>
+                                <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">new plants by 2030</div>
+                                <div class="highlight-box mega">
+                                    That's roughly <strong>one new power plant every week</strong> for a year.<br><br>
+                                    We're not building anywhere near that fast.<br><br>
+                                    <strong>This is the actual constraint.</strong> Not chips. Not talent. Electricity.
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="stat-label">WHO'S DRINKING THE POWER</div>
+                                <table>
+                                    <tr>
+                                        <th>Region</th>
+                                        <th>2024</th>
+                                        <th>2030</th>
+                                        <th>Growth</th>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>USA</strong></td>
+                                        <td>185 TWh</td>
+                                        <td>425 TWh</td>
+                                        <td style="color: #ff4444; font-weight: 700;">+130%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>China</strong></td>
+                                        <td>103 TWh</td>
+                                        <td>278 TWh</td>
+                                        <td style="color: #ff4444; font-weight: 700;">+170%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Europe</strong></td>
+                                        <td>64 TWh</td>
+                                        <td>109 TWh</td>
+                                        <td style="color: #ff8800; font-weight: 700;">+70%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Everyone Else</strong></td>
+                                        <td>63 TWh</td>
+                                        <td>133 TWh</td>
+                                        <td style="color: #00cc66; font-weight: 700;">+111%</td>
+                                    </tr>
+                                </table>
+                                <p style="margin-top: 15px; font-size: 0.95rem; font-weight: 600;">
+                                    US + China = 80% of the growth. If you don't have cheap electricity, you're not in the game.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: SO WHAT? -->
+        <div class="section">
+            <div class="section-header sowhat">
+                <span>💼 SO WHAT?</span>
+                <span style="font-size: 1rem;">THE HONEST IMPLICATIONS</span>
+            </div>
+            
+            <div class="section-subtitle">
+                No hype. No doom. Just what this probably means for the next 3-5 years, based on what we can actually see happening right now.
+            </div>
+
+            <div class="sowhat-grid">
+                <div class="sowhat-card">
+                    <div class="sowhat-card-title">IF YOU WORK WITH WORDS, CODE, OR DATA</div>
+                    <div class="sowhat-card-text">
+                        Your job looks different in 3 years. Not gone. <strong>Different.</strong><br><br>
+                        
+                        The stuff that's pure pattern-matching (writing boilerplate, summarizing documents, basic analysis) gets automated hard. The stuff that requires judgment, taste, or understanding what wasn't said — that's still yours.<br><br>
+                        
+                        The people who win are the ones who figure out how to use AI as a force multiplier, not the ones trying to compete with it directly.
+                    </div>
+                </div>
+
+                <div class="sowhat-card">
+                    <div class="sowhat-card-title">THE COUNTRIES WITH ENERGY & CHIPS WIN</div>
+                    <div class="sowhat-card-text">
+                        This isn't an "AI race." It's an <strong>energy-constrained, chip-limited infrastructure race</strong> that happens to produce intelligence as output.<br><br>
+                        
+                        Winners = whoever can secure: <strong>POWER → CHIPS → TALENT</strong> (in that order).<br><br>
+                        
+                        US has all three. China is building fast. Middle East has cheap electricity. Europe is... discussing regulations. The gap is widening, not closing.
+                    </div>
+                </div>
+
+                <div class="sowhat-card">
+                    <div class="sowhat-card-title">THIS IS MOVING FASTER THAN ANYTHING IN HISTORY</div>
+                    <div class="sowhat-card-text">
+                        Internet took 20 years to reshape everything. Smartphones took 10 years. AI is doing it in 5.<br><br>
+                        
+                        Nobody — including the people building it — knows exactly where this lands. The models are improving faster than we can figure out what to do with them.<br><br>
+                        
+                        If you're waiting for things to "settle down" before paying attention, you're already behind.
+                    </div>
+                </div>
+
+                <div class="sowhat-card">
+                    <div class="sowhat-card-title">THE ECONOMICS ARE WILD</div>
+                    <div class="sowhat-card-text">
+                        Training costs are going from millions to billions. Energy demand is doubling every 5 years. And somehow, these companies are giving it away almost free to consumers.<br><br>
+                        
+                        The business model is still being figured out. The winners might not be the ones with the best models — they'll be the ones who figure out how to monetize this sustainably.<br><br>
+                        
+                        Right now, we're in the "light money on fire to grab market share" phase. That doesn't last forever.
+                    </div>
+                </div>
+
+                <div class="sowhat-card">
+                    <div class="sowhat-card-title">REGULATION IS COMING (BUT TOO SLOW)</div>
+                    <div class="sowhat-card-text">
+                        By the time governments figure out how to regulate this, the technology will have moved three generations forward.<br><br>
+                        
+                        The people making the rules don't understand the tech. The people building the tech don't want rules. And the whole thing is moving too fast for traditional policy cycles.<br><br>
+                        
+                        Expect messy, reactive regulation that tries to fix yesterday's problems while tomorrow's are already here.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div style="font-size: 1.1rem; margin-bottom: 20px; font-weight: 700;">
+                Built with ☕️, 🤖, and a concerning amount of Chart.js
+            </div>
+            
+            <p style="margin-bottom: 15px;">
+                Made by someone who reads too many AI papers and then tries to explain them to normal people.
+                <a href="https://x.com/shivambhotika" target="_blank" class="footer-link">@shivambhotika</a>
+            </p>
+            
+            <div class="footer-sources">
+                <strong>Sources & Methodology:</strong><br>
+                Compute data: <a href="https://epochai.org" target="_blank" class="footer-link">Epoch AI Database</a> (3,200+ models tracked)<br>
+                Power data: <a href="https://iea.org" target="_blank" class="footer-link">International Energy Agency</a> (April 2025 Report)<br>
+                Capability benchmarks: OpenAI, Anthropic, Google DeepMind model cards (2020-2025)<br>
+                Cost estimates: Industry reports + analyst estimates (take with appropriate salt)<br><br>
+                
+                Last updated: February 2026<br>
+                This is for learning, not investing. I'm not a financial advisor, I just read a lot of white papers.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // MODAL TOGGLE
+        function toggleModal() {
+            document.getElementById('aboutModal').classList.toggle('active');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('aboutModal');
+            if (event.target === modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        Chart.defaults.color = '#000';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        // TIMELINE SLIDER
+        const timelineData = [
+            { year: '2020', text: 'AI could barely complete a paragraph without hallucinating fake facts. Coding? Forget it. Math? Maybe addition.' },
+            { year: '2024', text: 'AI passes the bar exam, writes working software, and solves grad-school math. Still can\'t plan a vacation without screwing up at least once.' },
+            { year: '2030', text: 'If current trends hold: AI handles most knowledge work, plans complex projects, and starts doing original research. The stuff that still requires human judgment gets <em>really</em> valuable.' }
+        ];
+        
+        document.getElementById('timelineSlider').addEventListener('input', (e) => {
+            const index = parseInt(e.target.value);
+            document.getElementById('timelineYear').textContent = timelineData[index].year;
+            document.getElementById('timelineContent').innerHTML = timelineData[index].text;
+            
+            // Update marks
+            document.querySelectorAll('.timeline-mark').forEach((mark, i) => {
+                mark.classList.toggle('active', i === index);
+            });
+        });
+
+        // COMPARISON TOGGLE
+        const comparisons = {
+            uk: { 
+                stat: '= UK (300 TWh)', 
+                text: 'Data centers currently use more electricity than the entire United Kingdom. Every year. And that number is growing 15% annually.',
+                detail: 'That\'s equivalent to powering 28 million UK households for an entire year. For context, the UK has 27 million households total.'
+            },
+            homes: { 
+                stat: '= 88 MILLION HOMES', 
+                text: 'Enough electricity to power every household in Germany, France, and the UK combined. For a full year.',
+                detail: 'If you stacked 88 million homes, you\'d cover an area the size of Belgium. Twice. That\'s how much residential power AI data centers consume annually.'
+            },
+            bitcoin: { 
+                stat: '= BITCOIN × 3', 
+                text: 'Remember when everyone freaked out about Bitcoin\'s energy usage? AI uses three times that. And it\'s growing faster.',
+                detail: 'Bitcoin mining uses ~140 TWh/year. AI data centers use 415 TWh/year. That\'s a 3x difference and AI is accelerating while Bitcoin is relatively stable.'
+            },
+            cars: { 
+                stat: '= 250M ELECTRIC CARS', 
+                text: 'The same electricity needed to charge a quarter-billion electric cars for a year. That\'s roughly every car in the US and Europe combined.',
+                detail: 'Average EV uses 1,660 kWh/year. 415 TWh ÷ 1,660 kWh = 250 million cars. For perspective, there are only ~320 million cars total in the US.'
+            }
+        };
+        
+        function showComparison(type, button) {
+            document.querySelectorAll('.comparison-button').forEach(b => b.classList.remove('active'));
+            button.classList.add('active');
+            document.getElementById('comparisonStat').textContent = comparisons[type].stat;
+            document.getElementById('comparisonText').textContent = comparisons[type].text;
+            document.getElementById('comparisonDetail').textContent = comparisons[type].detail;
+        }
+
+        // COMPUTE CHART
+        const computeData = {
+            labels: ['GPT-1', 'GPT-2', 'GPT-3', 'Codex', 'PaLM', 'GPT-4', 'Gemini', 'DeepSeek', 'R1', 'Kimi', 'GPT-5'],
+            costs: [0.12, 0.25, 4.6, 2, 17, 78, 191, 5.6, 6.8, 15, 290],
+            flops: [3.14e21, 1.5e22, 3.14e23, 3.14e23, 2.5e24, 2.1e25, 5e25, 2.79e24, 4.02e24, 2.98e24, 6.6e25]
+        };
+
+        let computeChart = new Chart(document.getElementById('computeChart'), {
+            type: 'line',
+            data: {
+                labels: computeData.labels,
+                datasets: [{
+                    data: computeData.costs,
+                    borderColor: '#ff4444',
+                    backgroundColor: 'rgba(255, 68, 68, 0.1)',
+                    borderWidth: 3,
+                    pointRadius: 6,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#000',
+                        padding: 12,
+                        callbacks: {
+                            label: (context) => '$' + context.parsed.y + 'M to train'
+                        }
+                    }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        ticks: { callback: (value) => '$' + value + 'M' }
+                    }
+                }
+            }
+        });
+
+        function showComputeView(view, button) {
+            document.querySelectorAll('.comparison-button').forEach(b => b.classList.remove('active'));
+            button.classList.add('active');
+            
+            if (view === 'cost') {
+                computeChart.data.datasets[0].data = computeData.costs;
+                computeChart.options.scales.y.type = 'linear';
+                computeChart.options.scales.y.ticks.callback = (value) => '$' + value + 'M';
+                computeChart.options.plugins.tooltip.callbacks.label = (context) => '$' + context.parsed.y + 'M to train';
+            } else {
+                computeChart.data.datasets[0].data = computeData.flops;
+                computeChart.options.scales.y.type = 'logarithmic';
+                computeChart.options.scales.y.ticks.callback = (value) => {
+                    const exp = Math.log10(value);
+                    return Number.isInteger(exp) ? '10^' + exp : '';
+                };
+                computeChart.options.plugins.tooltip.callbacks.label = (context) => {
+                    const labels = [
+                        'Your laptop', 'A room of servers', 'Small data center', 
+                        'Large data center', 'A small country\'s compute', 
+                        'Incomprehensible', 'Truly absurd', 'Beyond comprehension',
+                        'What even is this', 'Math broke', 'GPT-5 level'
+                    ];
+                    return labels[context.dataIndex] || 'A lot of math';
+                };
+            }
+            computeChart.update();
+        }
+
+        // CAPABILITY CHART
+        new Chart(document.getElementById('capabilityChart'), {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                datasets: [
+                    {
+                        label: 'Knowledge',
+                        data: [44, 56, 68, 86, 89, 93],
+                        borderColor: '#ff8800',
+                        backgroundColor: 'rgba(255, 136, 0, 0.1)',
+                        borderWidth: 4,
+                        pointRadius: 6,
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Coding',
+                        data: [29, 48, 67, 74, 92, 97],
+                        borderColor: '#00cc66',
+                        backgroundColor: 'rgba(0, 204, 102, 0.1)',
+                        borderWidth: 4,
+                        pointRadius: 6,
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Math',
+                        data: [0, 35, 57, 92, 96, 99],
+                        borderColor: '#9933ff',
+                        backgroundColor: 'rgba(153, 51, 255, 0.1)',
+                        borderWidth: 4,
+                        pointRadius: 6,
+                        tension: 0.3,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { 
+                            padding: 20,
+                            font: { size: 14, weight: 'bold' }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#000',
+                        padding: 15,
+                        callbacks: {
+                            afterLabel: (context) => {
+                                const explanations = {
+                                    'Knowledge': 'Standardized test performance across 57 subjects',
+                                    'Coding': 'Ability to write working software from scratch',
+                                    'Math': 'From grade-school word problems to advanced proofs'
+                                };
+                                return explanations[context.dataset.label];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 100,
+                        ticks: { callback: (value) => value + '%' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
