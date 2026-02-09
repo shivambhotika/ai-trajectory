@@ -1,1 +1,1 @@
-# ai-trajectory
+# the-cost-of-thinking
