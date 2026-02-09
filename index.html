@@ -175,31 +175,18 @@
         .panel-chart { grid-column: span 2; }
         .full-width { grid-column: 1 / -1; border-right: none; }
         
-        /* CAPABILITY SECTION LAYOUT */
-        .capability-chart-full {
-            grid-column: 1 / -1;
-            border-right: none;
-            border-bottom: 4px solid var(--border);
+        /* KNOWLEDGE GRID */
+        .knowledge-grid {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 0;
         }
         
-        .stats-row {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0;
-        }
-        
-        .stats-row .panel {
-            border-bottom: 4px solid var(--border);
-        }
-        
-        .stats-row .panel:nth-child(1),
-        .stats-row .panel:nth-child(2) {
+        .knowledge-chart-panel {
             border-right: 4px solid var(--border);
+            border-bottom: 4px solid var(--border);
         }
         
-        .stats-row .panel:nth-child(3) {
-            border-right: none;
+        .knowledge-stats-panel {
+            border-bottom: 4px solid var(--border);
         }
         
         /* TIER LIST */
@@ -438,12 +425,400 @@
         
         tr:nth-child(even) { background: #f8f8f8; }
         
+        /* BILL GENERATOR */
+        .model-cards {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .model-card {
+            border: 6px solid #000; padding: 30px; cursor: pointer;
+            transition: all 0.2s; text-align: center;
+            background: #f8f8f8;
+        }
+        
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.2);
+            background: #fff;
+        }
+        
+        .model-card-icon {
+            font-size: 3rem; margin-bottom: 15px;
+        }
+        
+        .model-card-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem; margin-bottom: 10px;
+        }
+        
+        .model-card-desc {
+            font-size: 0.95rem; color: #666; line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .model-card-example {
+            font-size: 0.85rem; color: #999; font-style: italic;
+        }
+        
+        .invoice-modal {
+            display: none; position: fixed; z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .invoice-modal.active {
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        .invoice-container {
+            background: white; max-width: 800px; width: 100%;
+            border: 8px solid #000; padding: 0; position: relative;
+            box-shadow: 20px 20px 0 rgba(0,0,0,0.3);
+        }
+        
+        .invoice-content {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem; line-height: 1.6;
+            padding: 40px; color: #000;
+        }
+        
+        .invoice-header {
+            text-align: center; border-bottom: 3px double #000;
+            padding-bottom: 20px; margin-bottom: 20px;
+        }
+        
+        .invoice-company {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem; letter-spacing: 2px;
+        }
+        
+        .invoice-line {
+            border-top: 1px solid #000; margin: 15px 0;
+        }
+        
+        .invoice-item {
+            display: flex; justify-content: space-between;
+            padding: 8px 0; border-bottom: 1px solid #ddd;
+        }
+        
+        .invoice-total {
+            border: 4px solid #000; padding: 20px;
+            text-align: center; margin: 20px 0;
+            background: #f8f8f8;
+        }
+        
+        .invoice-total-amount {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem; color: #ff4444;
+        }
+        
+        .invoice-comparisons {
+            background: #fff3cd; border: 4px solid #000;
+            padding: 20px; margin-top: 20px;
+        }
+        
+        .invoice-close {
+            position: sticky; bottom: 0; background: #000;
+            color: white; border: none; padding: 15px;
+            width: 100%; cursor: pointer; font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem; letter-spacing: 1px;
+        }
+        
+        .invoice-close:hover { background: #333; }
+        
+        /* WATER USAGE */
+        .water-profiles {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 15px; margin: 25px 0;
+        }
+        
+        .water-profile {
+            border: 6px solid #000; padding: 25px;
+            text-align: center; cursor: pointer;
+            transition: all 0.2s; background: #f8f8f8;
+        }
+        
+        .water-profile:hover {
+            transform: translateY(-5px);
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.2);
+            background: #fff;
+        }
+        
+        .water-profile.selected {
+            background: var(--blue); color: white;
+            border-color: var(--blue);
+        }
+        
+        .water-profile-icon {
+            font-size: 3rem; margin-bottom: 10px;
+        }
+        
+        .water-profile-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem; margin-bottom: 8px;
+        }
+        
+        .water-profile-desc {
+            font-size: 0.85rem; line-height: 1.4;
+        }
+        
+        .water-result {
+            display: none; margin-top: 30px;
+        }
+        
+        .water-result.active { display: block; }
+        
+        .water-visualization {
+            background: #f8f8f8; border: 6px solid #000;
+            padding: 40px; text-align: center; margin-bottom: 25px;
+        }
+        
+        .water-container {
+            width: 300px; height: 400px; margin: 20px auto;
+            border: 6px solid #000; position: relative;
+            overflow: hidden; background: white;
+        }
+        
+        .water-fill {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(180deg, #4444ff 0%, #0088ff 100%);
+            transition: height 1s ease-out;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem;
+        }
+        
+        .water-amount {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem; margin-top: 20px;
+        }
+        
+        .water-comparisons {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 20px; margin-top: 25px;
+        }
+        
+        .water-comparison-box {
+            background: #fff; border: 4px solid #000;
+            padding: 25px; text-align: center;
+        }
+        
+        .water-kicker {
+            background: #ff4444; color: white;
+            border: 6px solid #000; padding: 30px;
+            margin-top: 25px; text-align: center;
+        }
+        
+        .water-kicker-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem; margin-bottom: 15px;
+        }
+        
+        /* CAPABILITY QUIZ */
+        .quiz-container {
+            max-width: 600px; margin: 30px auto;
+        }
+        
+        .quiz-card {
+            background: #f8f8f8; border: 6px solid #000;
+            padding: 40px; text-align: center; min-height: 400px;
+            display: flex; flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .quiz-question {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem; margin-bottom: 30px;
+            line-height: 1.2;
+        }
+        
+        .quiz-options {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 15px; margin-bottom: 20px;
+        }
+        
+        .quiz-option {
+            border: 6px solid #000; padding: 30px;
+            cursor: pointer; transition: all 0.2s;
+            background: white; font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+        }
+        
+        .quiz-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.2);
+        }
+        
+        .quiz-option.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .quiz-option-icon {
+            font-size: 3rem; display: block; margin-bottom: 10px;
+        }
+        
+        .quiz-progress {
+            font-size: 0.9rem; color: #666; margin-top: 20px;
+        }
+        
+        .quiz-reveal {
+            display: none; text-align: left;
+        }
+        
+        .quiz-reveal.active { display: block; }
+        
+        .quiz-reveal-header {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem; padding: 20px;
+            text-align: center; margin-bottom: 20px;
+            border: 4px solid #000;
+        }
+        
+        .quiz-reveal-header.correct {
+            background: #e8f5e9; border-color: #00cc66;
+            color: #00cc66;
+        }
+        
+        .quiz-reveal-header.almost {
+            background: #fff3e0; border-color: #ff8800;
+            color: #ff8800;
+        }
+        
+        .quiz-reveal-header.wrong {
+            background: #ffebee; border-color: #ff4444;
+            color: #ff4444;
+        }
+        
+        .quiz-reveal-content {
+            line-height: 1.8; font-size: 1rem;
+        }
+        
+        .quiz-reveal-content strong {
+            display: block; margin: 15px 0 10px;
+            font-size: 1.1rem;
+        }
+        
+        .quiz-next {
+            background: #000; color: white; border: none;
+            padding: 15px 40px; margin-top: 25px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem; cursor: pointer; width: 100%;
+        }
+        
+        .quiz-next:hover { background: #333; }
+        
+        .quiz-results {
+            text-align: center;
+        }
+        
+        .quiz-score {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 5rem; margin: 20px 0;
+            color: var(--blue);
+        }
+        
+        .quiz-verdict {
+            font-size: 1.8rem; margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .quiz-restart {
+            background: var(--blue); color: white;
+            border: 4px solid #000; padding: 15px 40px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem; cursor: pointer; margin-top: 25px;
+        }
+        
+        .quiz-restart:hover {
+            background: #3333cc;
+        }
+        
+        /* COMPUTE SLIDER */
+        .compute-slider-container {
+            background: #f8f8f8; border: 6px solid #000;
+            padding: 40px; margin: 25px 0;
+        }
+        
+        .compute-scale-wrapper {
+            position: relative; padding: 40px 0;
+        }
+        
+        .compute-scale-slider {
+            width: 100%; height: 12px; cursor: pointer;
+            -webkit-appearance: none; appearance: none;
+            background: linear-gradient(to right, 
+                #00cc66 0%, #ffcc00 25%, #ff8800 50%, #ff4444 75%, #ff0000 100%);
+            border-radius: 10px; outline: none;
+            border: 3px solid var(--border);
+        }
+        
+        .compute-scale-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 40px; height: 40px; background: var(--fg);
+            cursor: pointer; border-radius: 50%; border: 4px solid white;
+            box-shadow: 0 0 0 3px var(--border);
+        }
+        
+        .compute-scale-slider::-moz-range-thumb {
+            width: 40px; height: 40px; background: var(--fg);
+            cursor: pointer; border-radius: 50%; border: 4px solid white;
+            box-shadow: 0 0 0 3px var(--border);
+        }
+        
+        .compute-labels {
+            display: flex; justify-content: space-between;
+            margin-top: 15px; font-size: 0.8rem;
+            font-family: 'Space Mono', monospace;
+        }
+        
+        .compute-display {
+            background: white; border: 6px solid #000;
+            padding: 40px; margin-top: 30px; min-height: 300px;
+        }
+        
+        .compute-level {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem; margin-bottom: 20px;
+            color: var(--red);
+        }
+        
+        .compute-stat-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 20px; margin: 20px 0;
+        }
+        
+        .compute-stat {
+            padding: 15px; background: #f8f8f8;
+            border-left: 6px solid var(--border);
+        }
+        
+        .compute-stat-label {
+            font-size: 0.75rem; text-transform: uppercase;
+            letter-spacing: 1px; color: #666; margin-bottom: 5px;
+        }
+        
+        .compute-stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+        }
+        
+        .compute-fun-fact {
+            background: #fff3cd; border: 4px solid #000;
+            padding: 20px; margin-top: 20px;
+            font-size: 1.05rem; line-height: 1.7;
+            font-weight: 600;
+        }
+        
         @media (max-width: 1024px) {
-            .main-grid, .tier-list, .napkin-showcase, .personal-stat-grid, .comparison-grid, .stats-row {
+            .main-grid, .tier-list, .napkin-showcase, .personal-stat-grid, .comparison-grid, .knowledge-grid {
                 grid-template-columns: 1fr;
             }
             .panel { border-right: none !important; }
-            .stats-row .panel { border-right: none !important; }
+            .knowledge-chart-panel { border-right: none; }
+            .model-cards, .water-profiles, .quiz-options, .compute-stat-grid, .water-comparisons {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -497,26 +872,25 @@
             </div>
 
             <div class="main-grid">
-                <!-- THE SKILL CURVE - FULL WIDTH CHART -->
-                <div class="capability-chart-full">
-                    <div class="panel-header yellow">THE SKILL CURVE</div>
-                    <div style="padding: 40px;">
-                        <div style="font-size: 0.95rem; margin-bottom: 15px; color: #666; font-weight: 600;">
-                            Three core skills. All racing toward 100%. None of them stopping.
-                        </div>
-                        <canvas id="capabilityChart" style="max-height: 400px;"></canvas>
-                        <div style="margin-top: 20px; font-size: 0.85rem; color: #666; line-height: 1.6;">
-                            <strong>Knowledge</strong> = standardized test scores across 57 subjects (history, law, medicine, etc.)<br>
-                            <strong>Coding</strong> = ability to write working software from scratch<br>
-                            <strong>Math</strong> = grade-school word problems through advanced proofs
+                <!-- THE SKILL CURVE - ENLARGED CHART -->
+                <div class="knowledge-grid">
+                    <div class="knowledge-chart-panel">
+                        <div class="panel-header yellow">THE SKILL CURVE</div>
+                        <div style="padding: 40px;">
+                            <div style="font-size: 0.95rem; margin-bottom: 15px; color: #666; font-weight: 600;">
+                                Three core skills. All racing toward 100%. None of them stopping.
+                            </div>
+                            <canvas id="capabilityChart" style="max-height: 400px;"></canvas>
+                            <div style="margin-top: 20px; font-size: 0.85rem; color: #666; line-height: 1.6;">
+                                <strong>Knowledge</strong> = standardized test scores across 57 subjects (history, law, medicine, etc.)<br>
+                                <strong>Coding</strong> = ability to write working software from scratch<br>
+                                <strong>Math</strong> = grade-school word problems through advanced proofs
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- STATS ROW - ALL THREE STATS -->
-                <div class="stats-row">
                     <!-- KNOWLEDGE STAT -->
-                    <div class="panel">
+                    <div class="knowledge-stats-panel">
                         <div class="panel-header yellow">KNOWLEDGE TESTS</div>
                         <div class="panel-body">
                             <div class="stat-label">STANDARDIZED EXAMS (57 SUBJECTS)</div>
@@ -527,30 +901,30 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- CODING STAT -->
-                    <div class="panel">
-                        <div class="panel-header yellow">CODING</div>
-                        <div class="panel-body">
-                            <div class="stat-label">SOFTWARE ENGINEERING</div>
-                            <div class="stat-big" style="color: #ff8800;">97%</div>
-                            <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">success rate</div>
-                            <div class="highlight-box">
-                                Better at coding than most programmers. Was 29% in 2021. Yeah.
-                            </div>
+                <!-- CODING STAT -->
+                <div class="panel">
+                    <div class="panel-header yellow">CODING</div>
+                    <div class="panel-body">
+                        <div class="stat-label">SOFTWARE ENGINEERING</div>
+                        <div class="stat-big" style="color: #ff8800;">97%</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">success rate</div>
+                        <div class="highlight-box">
+                            Better at coding than most programmers. Was 29% in 2021. Yeah.
                         </div>
                     </div>
+                </div>
 
-                    <!-- MATH STAT -->
-                    <div class="panel">
-                        <div class="panel-header yellow">MATH</div>
-                        <div class="panel-body">
-                            <div class="stat-label">GRADE-SCHOOL WORD PROBLEMS</div>
-                            <div class="stat-big" style="color: #ff8800;">99%</div>
-                            <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">solved correctly</div>
-                            <div class="highlight-box">
-                                Essentially solved. Working on olympiad-level proofs now.
-                            </div>
+                <!-- MATH STAT -->
+                <div class="panel">
+                    <div class="panel-header yellow">MATH</div>
+                    <div class="panel-body">
+                        <div class="stat-label">GRADE-SCHOOL WORD PROBLEMS</div>
+                        <div class="stat-big" style="color: #ff8800;">99%</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">solved correctly</div>
+                        <div class="highlight-box">
+                            Essentially solved. Working on olympiad-level proofs now.
                         </div>
                     </div>
                 </div>
@@ -599,6 +973,24 @@
                         
                         <div class="highlight-box mega">
                             <strong>The pattern:</strong> If the task has clear rules and lots of examples, AI crushes it. If it requires judgment, taste, or understanding what you <em>didn't</em> say, humans still win.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI CAPABILITY QUIZ -->
+                <div class="panel full-width">
+                    <div class="panel-header yellow">TEST YOUR AI IQ - CAN YOU SPOT THE HYPE?</div>
+                    <div class="panel-body">
+                        <div style="text-align: center; margin-bottom: 20px; font-size: 1.1rem; font-weight: 600;">
+                            Everyone's screaming about AGI. But can you tell what AI can actually do right now?
+                        </div>
+                        <div class="quiz-container">
+                            <div id="quizCard" class="quiz-card">
+                                <div id="quizQuestion" class="quiz-question"></div>
+                                <div id="quizOptions" class="quiz-options"></div>
+                                <div id="quizReveal" class="quiz-reveal"></div>
+                                <div class="quiz-progress" id="quizProgress"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -756,6 +1148,74 @@
                     </div>
                 </div>
 
+                <!-- BILL GENERATOR -->
+                <div class="panel full-width">
+                    <div class="panel-header red">BUILD YOUR OWN AI MODEL (AND WATCH YOUR BUDGET EXPLODE)</div>
+                    <div class="panel-body">
+                        <div style="text-align: center; margin-bottom: 25px; font-size: 1.1rem; font-weight: 600;">
+                            Slap together your dream model. Watch your Series B evaporate.
+                        </div>
+                        <div class="model-cards">
+                            <div class="model-card" onclick="showInvoice('basic')">
+                                <div class="model-card-icon">💬</div>
+                                <div class="model-card-title">BASIC CHATBOT</div>
+                                <div class="model-card-desc">Just text. Answers questions.</div>
+                                <div class="model-card-example">Think: ChatGPT circa 2022</div>
+                            </div>
+                            <div class="model-card" onclick="showInvoice('smart')">
+                                <div class="model-card-icon">🧠</div>
+                                <div class="model-card-title">SMART ASSISTANT</div>
+                                <div class="model-card-desc">Code, math, reasoning.</div>
+                                <div class="model-card-example">Think: GPT-4 level</div>
+                            </div>
+                            <div class="model-card" onclick="showInvoice('multimodal')">
+                                <div class="model-card-icon">🎨</div>
+                                <div class="model-card-title">MULTIMODAL BEAST</div>
+                                <div class="model-card-desc">Text, images, maybe video.</div>
+                                <div class="model-card-example">Think: Gemini/GPT-5 level</div>
+                            </div>
+                            <div class="model-card" onclick="showInvoice('audacity')">
+                                <div class="model-card-icon">🚀</div>
+                                <div class="model-card-title">THE AUDACITY</div>
+                                <div class="model-card-desc">Video, real-time, everything.</div>
+                                <div class="model-card-example">Think: Sora but better</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMPUTE SCALE SLIDER -->
+                <div class="panel full-width">
+                    <div class="panel-header red">THE SCALE OF STUPID</div>
+                    <div class="panel-body">
+                        <div style="text-align: center; margin-bottom: 20px; font-size: 1.1rem; font-weight: 600;">
+                            Drag to understand just how absurdly big AI compute has gotten
+                        </div>
+                        <div class="compute-slider-container">
+                            <div class="compute-scale-wrapper">
+                                <input type="range" min="0" max="5" value="0" step="1" class="compute-scale-slider" id="computeSlider">
+                                <div class="compute-labels">
+                                    <span>YOUR PHONE<br>10¹²</span>
+                                    <span>GAMING PC<br>10¹⁵</span>
+                                    <span>SMALL DC<br>10¹⁸</span>
+                                    <span>DATA CTR<br>10²¹</span>
+                                    <span>GPT-4<br>10²⁵</span>
+                                    <span>GPT-5<br>10²⁶</span>
+                                </div>
+                            </div>
+                            <div class="compute-display" id="computeDisplay"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INVOICE MODAL -->
+                <div id="invoiceModal" class="invoice-modal">
+                    <div class="invoice-container">
+                        <div class="invoice-content" id="invoiceContent"></div>
+                        <button class="invoice-close" onclick="closeInvoice()">CLOSE (AND CRY)</button>
+                    </div>
+                </div>
+
                 <!-- PERSONAL COST -->
                 <div class="panel full-width">
                     <div class="panel-header red">WHAT IT COSTS <em>YOU</em></div>
@@ -876,6 +1336,82 @@
                             </div>
                             <div class="comparison-detail" id="comparisonDetail">
                                 That's equivalent to powering 28 million UK households for an entire year. For context, the UK has 27 million households total.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WATER USAGE -->
+                <div class="panel full-width">
+                    <div class="panel-header blue">THE WATER BILL NOBODY SEES</div>
+                    <div class="panel-body">
+                        <div style="text-align: center; margin-bottom: 25px; font-size: 1.1rem; font-weight: 600;">
+                            Data centers drink water to stay cool. Here's how much YOUR AI habit costs the planet.
+                        </div>
+                        
+                        <div class="water-profiles">
+                            <div class="water-profile" onclick="showWaterUsage('student')">
+                                <div class="water-profile-icon">📚</div>
+                                <div class="water-profile-title">STUDENT</div>
+                                <div class="water-profile-desc">Uses ChatGPT for homework</div>
+                            </div>
+                            <div class="water-profile" onclick="showWaterUsage('office')">
+                                <div class="water-profile-icon">💼</div>
+                                <div class="water-profile-title">OFFICE WORKER</div>
+                                <div class="water-profile-desc">Uses ChatGPT + Copilot</div>
+                            </div>
+                            <div class="water-profile" onclick="showWaterUsage('creator')">
+                                <div class="water-profile-icon">🎨</div>
+                                <div class="water-profile-title">CREATOR</div>
+                                <div class="water-profile-desc">Makes content with AI tools</div>
+                            </div>
+                            <div class="water-profile" onclick="showWaterUsage('developer')">
+                                <div class="water-profile-icon">💻</div>
+                                <div class="water-profile-title">DEVELOPER</div>
+                                <div class="water-profile-desc">Codes with AI daily</div>
+                            </div>
+                            <div class="water-profile" onclick="showWaterUsage('addict')">
+                                <div class="water-profile-icon">🤖</div>
+                                <div class="water-profile-title">AI ADDICT</div>
+                                <div class="water-profile-desc">Uses EVERYTHING all the time</div>
+                            </div>
+                        </div>
+                        
+                        <div id="waterResult" class="water-result">
+                            <div class="water-visualization">
+                                <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 20px;">
+                                    YOUR DAILY AI WATER USAGE
+                                </div>
+                                <div class="water-container">
+                                    <div class="water-fill" id="waterFill">💧</div>
+                                </div>
+                                <div class="water-amount" id="waterAmount">0 LITERS PER DAY</div>
+                            </div>
+                            
+                            <div style="margin-top: 30px;">
+                                <div style="font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; text-align: center;">
+                                    THAT'S THE SAME AS:
+                                </div>
+                                <div class="water-comparisons" id="waterComparisons"></div>
+                            </div>
+                            
+                            <div style="margin-top: 30px;">
+                                <div style="font-size: 1.3rem; font-weight: 700; margin-bottom: 15px; text-align: center;">
+                                    MONTHLY: <span id="waterMonthly">0</span> liters<br>
+                                    YEARLY: <span id="waterYearly">0</span> liters
+                                </div>
+                                <div id="waterYearlyComparisons" style="text-align: center; font-size: 1.05rem; line-height: 1.8;"></div>
+                            </div>
+                            
+                            <div class="water-kicker">
+                                <div class="water-kicker-title">NOW MULTIPLY BY 1 BILLION PEOPLE</div>
+                                <div style="font-size: 1.1rem; line-height: 1.8;">
+                                    Global AI water consumption:<br>
+                                    <strong style="font-size: 2rem;">17 TRILLION liters per year</strong><br><br>
+                                    = Lake Geneva<br>
+                                    = 7 million Olympic pools<br>
+                                    = Every person on Earth's drinking water for 2 years
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1245,6 +1781,535 @@
                 }
             }
         });
+
+        // ========================================
+        // BILL GENERATOR
+        // ========================================
+        
+        const invoiceData = {
+            basic: {
+                title: 'BASIC CHATBOT',
+                subtitle: 'Just text. Answers questions.',
+                gpus: '5,000',
+                months: 3,
+                gpuCost: 18750000,
+                power: 11520000,
+                storage: 1500000,
+                network: 850000,
+                cooling: 1800000,
+                security: 400000,
+                engineers: 4500000,
+                dataLicensing: 2000000,
+                testing: 500000,
+                comparisons: [
+                    '842 Ferraris (at $50K each)',
+                    'Your entire seed round',
+                    'Making a Marvel movie (the cheap kind)',
+                    '7 years of median US household income'
+                ]
+            },
+            smart: {
+                title: 'SMART ASSISTANT (GPT-4 LEVEL)',
+                subtitle: 'Code, math, reasoning.',
+                gpus: '25,000',
+                months: 6,
+                gpuCost: 270000000,
+                power: 75168000,
+                storage: 11178000,
+                network: 3840000,
+                cooling: 8200000,
+                security: 1250000,
+                engineers: 18000000,
+                dataLicensing: 12500000,
+                testing: 2300000,
+                comparisons: [
+                    '8,209 Ferraris (at $50K each)',
+                    'The GDP of a small island nation',
+                    '137 years of median US household income',
+                    'Making Avengers: Endgame... 5 times'
+                ]
+            },
+            multimodal: {
+                title: 'MULTIMODAL BEAST (GPT-5 LEVEL)',
+                subtitle: 'Text, images, maybe video.',
+                gpus: '50,000',
+                months: 8,
+                gpuCost: 480000000,
+                power: 125280000,
+                storage: 22000000,
+                network: 8500000,
+                cooling: 15000000,
+                security: 2000000,
+                engineers: 28000000,
+                dataLicensing: 25000000,
+                testing: 5000000,
+                comparisons: [
+                    '14,217 Ferraris',
+                    'More than NASA\'s annual budget',
+                    'Your entire Series C (good luck)',
+                    'The net worth of a medium-sized tech CEO'
+                ]
+            },
+            audacity: {
+                title: 'THE AUDACITY (SORA+)',
+                subtitle: 'Video, real-time, everything.',
+                gpus: '100,000',
+                months: 12,
+                gpuCost: 1080000000,
+                power: 259200000,
+                storage: 45000000,
+                network: 18000000,
+                cooling: 32000000,
+                security: 4000000,
+                engineers: 48000000,
+                dataLicensing: 60000000,
+                testing: 12000000,
+                comparisons: [
+                    '31,165 Ferraris',
+                    'More than it cost to build the Burj Khalifa',
+                    'A small country\'s annual defense budget',
+                    'Congratulations, you just bankrupted your company'
+                ]
+            }
+        };
+
+        function showInvoice(modelType) {
+            const data = invoiceData[modelType];
+            const total = data.gpuCost + data.power + data.storage + data.network + 
+                         data.cooling + data.security + data.engineers + 
+                         data.dataLicensing + data.testing;
+            const infraFee = Math.round(total * 0.02);
+            const grandTotal = total + infraFee;
+            
+            const invoice = `
+<div class="invoice-header">
+    <div class="invoice-company">SILICON VALLEY COMPUTE</div>
+    <div style="margin-top: 10px; font-size: 0.9rem;">Cloud Infrastructure Services</div>
+    <div style="margin-top: 15px; font-size: 0.8rem;">
+        Invoice #: INV-2025-${Math.floor(Math.random() * 900000 + 100000)}<br>
+        Date: Feb 9, 2026<br>
+        Account: YOUR_STARTUP_INC
+    </div>
+</div>
+
+<div style="margin: 20px 0; padding: 15px; background: #f8f8f8; border: 3px solid #000;">
+    <strong>PROJECT:</strong> ${data.title}<br>
+    <em>${data.subtitle}</em><br>
+    <strong>BILLING PERIOD:</strong> ${data.months} months
+</div>
+
+<div class="invoice-line"></div>
+
+<div style="margin: 15px 0;">
+    <strong>COMPUTE RESOURCES</strong>
+</div>
+
+<div class="invoice-item">
+    <span>NVIDIA H100 GPU Cluster (${data.gpus} units × ${data.months}mo)</span>
+    <span>$${(data.gpuCost / 1000000).toFixed(1)}M</span>
+</div>
+<div class="invoice-item">
+    <span>Cloud Storage (Training Data)</span>
+    <span>$${(data.storage / 1000000).toFixed(1)}M</span>
+</div>
+<div class="invoice-item">
+    <span>Network Bandwidth</span>
+    <span>$${(data.network / 1000000).toFixed(1)}M</span>
+</div>
+
+<div class="invoice-line"></div>
+
+<div style="margin: 15px 0;">
+    <strong>INFRASTRUCTURE</strong>
+</div>
+
+<div class="invoice-item">
+    <span>Data Center Power</span>
+    <span>$${(data.power / 1000000).toFixed(1)}M</span>
+</div>
+<div class="invoice-item">
+    <span>Cooling Systems (Water + HVAC)</span>
+    <span>$${(data.cooling / 1000000).toFixed(1)}M</span>
+</div>
+<div class="invoice-item">
+    <span>Physical Security & Monitoring</span>
+    <span>$${(data.security / 1000000).toFixed(1)}M</span>
+</div>
+
+<div class="invoice-line"></div>
+
+<div style="margin: 15px 0;">
+    <strong>PROFESSIONAL SERVICES</strong>
+</div>
+
+<div class="invoice-item">
+    <span>ML Engineering Team (${data.months} months)</span>
+    <span>$${(data.engineers / 1000000).toFixed(1)}M</span>
+</div>
+<div class="invoice-item">
+    <span>Data Licensing & Partnerships</span>
+    <span>$${(data.dataLicensing / 1000000).toFixed(1)}M</span>
+</div>
+<div class="invoice-item">
+    <span>Model Evaluation & Testing</span>
+    <span>$${(data.testing / 1000000).toFixed(1)}M</span>
+</div>
+
+<div class="invoice-line" style="margin: 25px 0;"></div>
+
+<div style="text-align: right; margin-bottom: 15px;">
+    <div style="margin-bottom: 8px;">SUBTOTAL: $${(total / 1000000).toFixed(1)}M</div>
+    <div>Infrastructure Fee (2%): $${(infraFee / 1000000).toFixed(2)}M</div>
+</div>
+
+<div class="invoice-total">
+    <div style="font-size: 1rem; margin-bottom: 10px;">TOTAL DUE</div>
+    <div class="invoice-total-amount">$${(grandTotal / 1000000).toFixed(1)}M</div>
+</div>
+
+<div style="margin: 20px 0; padding: 15px; background: #fff; border: 2px solid #666; font-size: 0.85rem;">
+    <strong>PAYMENT TERMS:</strong> Due upon receipt<br>
+    Late fees: $500K/day<br>
+    <em>POWER SURCHARGE: Additional charges may apply if you cause rolling blackouts</em>
+</div>
+
+<div class="invoice-comparisons">
+    <div style="font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; margin-bottom: 15px;">
+        FOR COMPARISON, THIS AMOUNT EQUALS:
+    </div>
+    ${data.comparisons.map(c => `<div style="margin: 8px 0; font-size: 1rem;">• ${c}</div>`).join('')}
+</div>
+
+<div style="margin-top: 25px; padding: 15px; border-top: 2px solid #000; font-size: 0.75rem; text-align: center; color: #666;">
+    Questions? Contact: billing@siliconvalleycompute.ai<br>
+    <em>(Please don't call. We know you can't pay this.)</em>
+</div>
+            `;
+            
+            document.getElementById('invoiceContent').innerHTML = invoice;
+            document.getElementById('invoiceModal').classList.add('active');
+        }
+
+        function closeInvoice() {
+            document.getElementById('invoiceModal').classList.remove('active');
+        }
+
+        // Close invoice modal when clicking outside
+        document.getElementById('invoiceModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeInvoice();
+            }
+        });
+
+        // ========================================
+        // COMPUTE SLIDER
+        // ========================================
+        
+        const computeLevels = [
+            {
+                name: 'YOUR PHONE',
+                flops: '10¹² FLOPS',
+                canRun: '🎮 You can run: Candy Crush (barely)',
+                cost: '$0',
+                power: '5 watts',
+                useCase: '🏗️ Use case: Texting your mom',
+                funFact: 'Your phone has more computing power than all of NASA in 1969. We use it for TikTok.'
+            },
+            {
+                name: 'GAMING PC',
+                flops: '10¹⁵ FLOPS',
+                canRun: '🎮 You can run: Cyberpunk on ultra (finally)',
+                cost: '$3,000 one-time',
+                power: '750 watts',
+                useCase: '🏗️ Use case: Gaming and feeling superior',
+                funFact: 'A thousand times more powerful than your phone. Still can\'t run Crysis at max settings.'
+            },
+            {
+                name: 'SMALL DATA CENTER',
+                flops: '10¹⁸ FLOPS',
+                canRun: '🤖 You can train: A basic chatbot',
+                cost: '$50K/day',
+                power: '500 kilowatts',
+                useCase: '🏗️ Use case: Running a startup\'s infrastructure',
+                funFact: 'This is where most companies run their entire operation. It\'s cute compared to what\'s next.'
+            },
+            {
+                name: 'LARGE DATA CENTER',
+                flops: '10²¹ FLOPS',
+                canRun: '🤖 You can train: A decent language model',
+                cost: '$250K/day',
+                power: '10 megawatts (a small power plant)',
+                useCase: '🏗️ Use case: Powering Google/Facebook/Amazon services',
+                funFact: 'Uses as much electricity as 8,000 homes. Still not enough for cutting-edge AI.'
+            },
+            {
+                name: 'GPT-4 TRAINING',
+                flops: '10²⁵ FLOPS',
+                canRun: '🤖 You can train: A god-tier AI',
+                cost: '$1.3M/day',
+                power: '78 megawatts',
+                useCase: '🏗️ Use case: Making computers write poetry',
+                funFact: 'This is 10,000,000,000,000 times more compute than your phone. If your phone was a grain of sand, this would be Mount Everest.'
+            },
+            {
+                name: 'GPT-5 TRAINING',
+                flops: '10²⁶ FLOPS',
+                canRun: '🤖 You can train: The ultimate AI (maybe AGI?)',
+                cost: '$1.6M/day',
+                power: '145 megawatts (a dedicated power plant)',
+                useCase: '🏗️ Use case: Making computers smarter than most humans',
+                funFact: 'This is Mount Everest × 10. Actually, we\'re out of metaphors. It\'s stupid big. Only 5-6 organizations on Earth can afford this.'
+            }
+        ];
+
+        document.getElementById('computeSlider').addEventListener('input', function(e) {
+            const level = computeLevels[e.target.value];
+            document.getElementById('computeDisplay').innerHTML = `
+                <div class="compute-level">${level.name}</div>
+                <div style="font-family: 'Space Mono', monospace; font-size: 1.5rem; margin-bottom: 25px; color: #666;">
+                    ${level.flops}
+                </div>
+                <div class="compute-stat-grid">
+                    <div class="compute-stat">
+                        <div class="compute-stat-label">What you can run</div>
+                        <div class="compute-stat-value">${level.canRun.replace('🎮 You can run: ', '').replace('🤖 You can train: ', '')}</div>
+                    </div>
+                    <div class="compute-stat">
+                        <div class="compute-stat-label">Daily cost</div>
+                        <div class="compute-stat-value">${level.cost}</div>
+                    </div>
+                    <div class="compute-stat">
+                        <div class="compute-stat-label">Power usage</div>
+                        <div class="compute-stat-value">${level.power}</div>
+                    </div>
+                    <div class="compute-stat">
+                        <div class="compute-stat-label">Use case</div>
+                        <div class="compute-stat-value">${level.useCase.replace('🏗️ Use case: ', '')}</div>
+                    </div>
+                </div>
+                <div class="compute-fun-fact">
+                    ${level.funFact}
+                </div>
+            `;
+        });
+
+        // Initialize compute display
+        document.getElementById('computeSlider').dispatchEvent(new Event('input'));
+
+        // ========================================
+        // WATER USAGE
+        // ========================================
+        
+        const waterProfiles = {
+            student: { daily: 12, comparisons: ['🚿 Half a shower (25L)', '🍳 Washing dishes once (12L)'], yearly: ['30 bathtubs full', 'Your toilet for 1 month'] },
+            office: { daily: 28, comparisons: ['🚿 A full shower (40L)', '🧴 Doing laundry twice (28L)'], yearly: ['70 bathtubs full', 'Your toilet for 2.5 months'] },
+            creator: { daily: 65, comparisons: ['🚿 Two showers (80L)', '🧼 A full bath (65L)'], yearly: ['162 bathtubs full', 'Your toilet for 5.5 months'] },
+            developer: { daily: 47, comparisons: ['🚿 1.5 showers (60L)', '🪣 Three buckets of water (45L)'], yearly: ['117 bathtubs full', 'Your toilet for 4 months'] },
+            addict: { daily: 120, comparisons: ['🚿 Three showers (120L)', '🧽 Washing your car 4 times (120L)'], yearly: ['300 bathtubs full', 'Your toilet for 10 months'] }
+        };
+
+        function showWaterUsage(profile) {
+            // Remove all selected classes
+            document.querySelectorAll('.water-profile').forEach(p => p.classList.remove('selected'));
+            // Add selected to clicked
+            event.target.closest('.water-profile').classList.add('selected');
+            
+            const data = waterProfiles[profile];
+            const monthly = data.daily * 30;
+            const yearly = data.daily * 365;
+            
+            // Show result
+            document.getElementById('waterResult').classList.add('active');
+            
+            // Animate water fill
+            const fillPercent = Math.min((data.daily / 120) * 100, 100);
+            document.getElementById('waterFill').style.height = fillPercent + '%';
+            
+            // Update amount
+            document.getElementById('waterAmount').textContent = data.daily + ' LITERS PER DAY';
+            
+            // Update comparisons
+            document.getElementById('waterComparisons').innerHTML = data.comparisons.map(c => 
+                `<div class="water-comparison-box"><div style="font-size: 2rem; margin-bottom: 10px;">${c.split(' ')[0]}</div><div>${c.substring(c.indexOf(' ') + 1)}</div></div>`
+            ).join('');
+            
+            // Update monthly/yearly
+            document.getElementById('waterMonthly').textContent = monthly.toLocaleString();
+            document.getElementById('waterYearly').textContent = yearly.toLocaleString();
+            document.getElementById('waterYearlyComparisons').innerHTML = `= ${data.yearly.join('<br>= ')}`;
+            
+            // Scroll to result
+            document.getElementById('waterResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ========================================
+        // CAPABILITY QUIZ
+        // ========================================
+        
+        const quizQuestions = [
+            {
+                question: 'DEBUG PRODUCTION CODE',
+                answer: 'solved',
+                answerText: '✅ SOLVED',
+                explanation: 'AI catches bugs faster than most senior devs.',
+                details: '<strong>STATS:</strong><br>• 87% of bugs found in standard tests<br>• Beats junior devs 95% of the time<br>• Beats senior devs 60% of the time<br><br><strong>THE CATCH:</strong><br>It\'s great at <em>finding</em> bugs. Less great at understanding <em>why</em> they matter.'
+            },
+            {
+                question: 'PLAN A SURPRISE PARTY',
+                answer: 'hard',
+                answerText: '❌ STILL HARD',
+                explanation: 'Can\'t track who knows what, coordinate schedules, or understand social dynamics.',
+                details: '<strong>WHY IT\'S HARD:</strong><br>• No theory of mind (can\'t model what others know)<br>• Can\'t keep secrets in context<br>• Doesn\'t understand "surprising someone"<br>• Would probably just text everyone the plan<br><br><strong>YOUR MOM IS STILL BETTER AT THIS.</strong>'
+            },
+            {
+                question: 'WRITE A LEGALLY BINDING CONTRACT',
+                answer: 'almost',
+                answerText: '🟡 ALMOST',
+                explanation: 'Can draft contracts that LOOK legit. Whether they\'ll hold up in court? Roll the dice.',
+                details: '<strong>STATS:</strong><br>• 91% accuracy on standard clauses<br>• Used by 40% of law firms for drafts<br>• 0% of lawyers would file it without review<br><br><strong>THE REALITY:</strong><br>Great first draft. Terrible final draft. Your lawyer still has a job.'
+            },
+            {
+                question: 'FOLD LAUNDRY',
+                answer: 'hard',
+                answerText: '❌ STILL HARD',
+                explanation: 'Physical world tasks are ABSURDLY hard.',
+                details: '<strong>THE PROBLEM:</strong><br>• Fabric is unpredictable<br>• Every shirt folds differently<br>• Requires touch, spatial reasoning, dexterity<br>• Robots are still slow as hell at this<br><br><strong>CURRENT RECORD:</strong><br>Boston Dynamics robot: 1 shirt every 4 minutes<br>Your mom: 30 shirts in 4 minutes'
+            },
+            {
+                question: 'PASS THE BAR EXAM',
+                answer: 'solved',
+                answerText: '✅ SOLVED',
+                explanation: 'GPT-4 scored in the 90th percentile.',
+                details: '<strong>STATS:</strong><br>• Better than 90% of human test-takers<br>• Scored 297/400 (passing is 266)<br>• Did it in minutes, not months of studying<br><br><strong>YOUR LAWYER\'S REACTION:</strong><br>"...maybe I should\'ve been a plumber."'
+            },
+            {
+                question: 'UNDERSTAND SARCASM',
+                answer: 'almost',
+                answerText: '🟡 ALMOST',
+                explanation: 'Gets it maybe 70% of the time. Your dad has better odds.',
+                details: '<strong>THE ISSUE:</strong><br>• Catches obvious sarcasm ("Oh great, more rain")<br>• Misses subtle tone shifts<br>• Doesn\'t understand cultural context<br>• Takes "literally" too literally<br><br><strong>EXAMPLE IT WOULD MISS:</strong><br>"Wow, another AI quiz. Just what the internet needed."'
+            },
+            {
+                question: 'GENERATE A VIRAL SONG',
+                answer: 'hard',
+                answerText: '❌ STILL HARD',
+                explanation: 'Can mimic ANY style perfectly. Can\'t create cultural moments.',
+                details: '<strong>WHAT AI CAN DO:</strong><br>• Sound like Drake, Taylor Swift, anyone<br>• Perfect chord progressions<br>• Technically flawless production<br><br><strong>WHAT AI CAN\'T DO:</strong><br>• Tap into zeitgeist<br>• Create "earworms" that stick<br>• Make you FEEL something new<br><br><strong>HITS REQUIRE MAGIC. AI HAS MATH.</strong>'
+            },
+            {
+                question: 'DETECT CANCER FROM SCANS',
+                answer: 'almost',
+                answerText: '🟡 ALMOST',
+                explanation: 'Matches radiologist accuracy (94%) but still needs human verification.',
+                details: '<strong>STATS:</strong><br>• Same accuracy as expert doctors<br>• 30% faster diagnosis<br>• Used in 60% of major hospitals<br><br><strong>THE CATCH:</strong><br>• Great at FINDING cancer<br>• Not great at edge cases<br>• Liability issues (who gets sued?)<br><br><strong>DIAGNOSIS: PROMISING BUT NOT SOLO YET.</strong>'
+            },
+            {
+                question: 'TRANSLATE 100+ LANGUAGES',
+                answer: 'solved',
+                answerText: '✅ SOLVED',
+                explanation: 'Better than most human translators. Not perfect, but shockingly good.',
+                details: '<strong>STATS:</strong><br>• 100+ languages at near-human quality<br>• Real-time translation that actually works<br>• Handles slang, idioms, context<br><br><strong>THE IMPACT:</strong><br>• Killed the "learn language for travel" market<br>• Professional translators focus on literary work<br>• Duolingo is pivoting hard<br><br><strong>BABEL FISH IS REAL.</strong>'
+            },
+            {
+                question: 'KNOW WHEN TO SHUT UP',
+                answer: 'hard',
+                answerText: '❌ STILL HARD',
+                explanation: 'Will. Keep. Talking. Forever.',
+                details: '<strong>THE PROBLEM:</strong><br>• No sense of when "enough is enough"<br>• Can\'t read the room<br>• Doesn\'t understand awkward silences<br>• Will explain jokes after telling them<br><br><strong>PROOF:</strong><br>This answer is already too long.<br>(See?)'
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let quizStarted = false;
+
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            quizStarted = true;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = quizQuestions[currentQuestion];
+            document.getElementById('quizQuestion').textContent = q.question;
+            document.getElementById('quizOptions').innerHTML = `
+                <div class="quiz-option" onclick="checkAnswer('solved')">
+                    <span class="quiz-option-icon">✅</span>
+                    SOLVED
+                </div>
+                <div class="quiz-option" onclick="checkAnswer('almost')">
+                    <span class="quiz-option-icon">🟡</span>
+                    ALMOST
+                </div>
+                <div class="quiz-option full-width" onclick="checkAnswer('hard')">
+                    <span class="quiz-option-icon">❌</span>
+                    STILL HARD
+                </div>
+            `;
+            document.getElementById('quizReveal').classList.remove('active');
+            document.getElementById('quizProgress').textContent = `Question ${currentQuestion + 1}/10`;
+        }
+
+        function checkAnswer(answer) {
+            const q = quizQuestions[currentQuestion];
+            const correct = answer === q.answer;
+            if (correct) score++;
+            
+            const revealClass = q.answer === 'solved' ? 'correct' : (q.answer === 'almost' ? 'almost' : 'wrong');
+            
+            document.getElementById('quizOptions').style.display = 'none';
+            document.getElementById('quizReveal').innerHTML = `
+                <div class="quiz-reveal-header ${revealClass}">
+                    ${q.answerText}
+                </div>
+                <div class="quiz-reveal-content">
+                    <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 15px;">${q.explanation}</p>
+                    <div>${q.details}</div>
+                </div>
+                <button class="quiz-next" onclick="nextQuestion()">
+                    ${currentQuestion < 9 ? 'NEXT QUESTION →' : 'SEE MY SCORE'}
+                </button>
+            `;
+            document.getElementById('quizReveal').classList.add('active');
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < 10) {
+                document.getElementById('quizOptions').style.display = 'grid';
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const verdict = score >= 8 ? 'PRETTY INFORMED' : 
+                           score >= 6 ? 'NOT BAD' :
+                           score >= 4 ? 'ROOM FOR IMPROVEMENT' : 'NEED TO CATCH UP';
+            const message = score >= 8 ? 'You know more than most VCs.<br>Less than most researchers.<br>Exactly where you should be.' :
+                           score >= 6 ? 'You\'re ahead of the average person.<br>But there\'s still some hype you fell for.' :
+                           score >= 4 ? 'You know the basics.<br>But AI surprised you more than you thought.' :
+                           'Either AI is moving faster than you realized,<br>or you need to read more tech news.';
+            
+            document.getElementById('quizCard').innerHTML = `
+                <div class="quiz-results">
+                    <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 10px;">YOU SCORED</div>
+                    <div class="quiz-score">${score}/10</div>
+                    <div class="quiz-verdict">YOUR AI IQ: ${verdict}</div>
+                    <div style="font-size: 1.1rem; line-height: 1.8; margin: 20px 0;">
+                        ${message}
+                    </div>
+                    <button class="quiz-restart" onclick="startQuiz()">
+                        RETAKE QUIZ
+                    </button>
+                </div>
+            `;
+        }
+
+        // Initialize quiz
+        startQuiz();
     </script>
 </body>
 </html>
